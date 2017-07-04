@@ -31,7 +31,7 @@ var config = {
     {
       test: /\.css$/,
       include: path.join(__dirname, 'public/css'),
-      loader: 'style-loader!css-loader!stylus-loader'
+      loader: 'style-loader!css-loader'
     }
     ]
   }

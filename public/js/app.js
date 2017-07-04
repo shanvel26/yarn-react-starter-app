@@ -1,5 +1,7 @@
-import React, { Component } from 'react'
-import { Link } from 'react-router'
+import React, { Component } from 'react';
+import { Link } from 'react-router';
+import Header from './header';
+import Main from './main';
 
 export default class App extends Component {
 	constructor(props) {
@@ -12,15 +14,8 @@ export default class App extends Component {
 	render() {
 		return (
 			<div>
-				<header className="navbar navbar-inverse bg-primary" style={{ "marginBottom": 50 }}>
-					<nav className="container">
-						<a className="navbar-brand" href="/">
-							Book a meeting
-					  </a>
-					</nav>
-				</header>
-				Home page... finally made it!!!
-				{this.props.children}
+				<Header />
+				<Main />
 			</div>
 		)
 	}

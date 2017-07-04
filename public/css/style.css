@@ -185,3 +185,8 @@ a.nav-link.active {
 .bd-callout-info {
     border-left: .25rem solid #f0ad4e !important;
 }
+
+
+th {
+  width: 60px
+}

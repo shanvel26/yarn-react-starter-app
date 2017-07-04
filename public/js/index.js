@@ -6,8 +6,7 @@ import App from './app';
 
 const router = (
 	<BrowserRouter>
-		<Route path='/' component={App}>
-		</Route>
+		<App />
 	</BrowserRouter>
 );
 
