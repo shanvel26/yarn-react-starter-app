@@ -7,6 +7,7 @@ var bodyParser = require('body-parser');
 var webpackDevMiddleware = require("webpack-dev-middleware");
 var webpack = require("webpack");
 var webpackConfig = require("./webpack.config");
+var hbs = require('hbs');
 
 var index = require('./routes/index');
 var users = require('./routes/users');
@@ -31,9 +32,13 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(webpackDevMiddleware(compiler, {
-  publicPath: "/", // Same as `output.publicPath` in most cases.
-  filename: "bundle.js"
+  // publicPath: "/", // Same as `output.publicPath` in most cases.
+  // filename: "bundle.js",
+  noInfo: true,
+  publicPath: webpackConfig.output.publicPath
 }));
+
+app.use(require('webpack-hot-middleware')(compiler));
 
 app.use('/', index);
 app.use('/users', users);

@@ -1,35 +1,40 @@
-var path = require('path');
 var webpack = require('webpack');
- 
-module.exports = {
-  entry: './public/index.jsx',
+var path = require('path');
 
-  plugins: [
-    new webpack.HotModuleReplacementPlugin() // Enable HMR
+// var BUILD_DIR = path.resolve(__dirname, 'public');
+var APP_DIR = path.resolve(__dirname, 'public');
+
+var config = {
+  entry: [
+    'webpack-hot-middleware/client',
+    "babel-polyfill",
+    APP_DIR + '/js/index.js'
   ],
-
-  output: { 
-    filename: './public/bundle.js', 
-    path: __dirname, 
-    publicPath: '/'
+  output: {
+    path: path.join(__dirname, 'dist'),
+    filename: 'bundle.js',
+    publicPath: '/static/'
   },
-  
-  devServer: {
-    hot: true, // Tell the dev-server we're using HMR
-    contentBase: path.resolve(__dirname), 
-    publicPath: '/'
-  },
-
+  plugins: [
+    new webpack.HotModuleReplacementPlugin(),
+    new webpack.NoEmitOnErrorsPlugin()
+  ],
   module: {
     loaders: [
-      {
-        test: /.jsx?$/,
-        loader: 'babel-loader',
-        exclude: /node_modules/,
-        query: {
-          presets: ['es2015', 'react']
-        }
-      }
+    // js
+    {
+      test: /\.js$/,
+      loaders: ['babel-loader'],
+      include: path.join(__dirname, 'public/js')
+    },
+    // CSS
+    {
+      test: /\.css$/,
+      include: path.join(__dirname, 'public/css'),
+      loader: 'style-loader!css-loader!stylus-loader'
+    }
     ]
-  },
+  }
 };
+
+module.exports = config;
