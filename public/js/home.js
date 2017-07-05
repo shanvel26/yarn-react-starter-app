@@ -42,7 +42,7 @@ export default class Home extends Component {
 						{
 							_id: '_id4',
 							from: '2017-06-04 09:00:00',
-							to: '2017-06-04 09:50:00',
+							to: '2017-06-04 10:00:00',
 							floor: 'F1',
 							purpose: 'General discussion',
 							invitees: ['shanvel26@gmail.com', 'ritesh@xyz.com'],
@@ -130,7 +130,7 @@ export default class Home extends Component {
 				console.log('SWIFTLEFT', swiftLeft);
 
 				return (
-					<Progress data={d} diff={diff} swiftLeft={swiftLeft} />
+					<Progress data={d} diff={diff} swiftLeft={swiftLeft+100} />
 				);
 			})
 
@@ -150,7 +150,7 @@ export default class Home extends Component {
 					</div>
 				
 				<div className="timeline sixteen wide column" id="timeline">
-					{/*<span style={{width: 100}}>Room</span>*/}
+					<span style={{width: 100}}>Room</span>
 					<span>9</span>
 					<span>10</span>
 					<span>11</span>
