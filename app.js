@@ -11,6 +11,7 @@ var hbs = require('hbs');
 
 var index = require('./routes/index');
 var users = require('./routes/users');
+var meeting = require('./routes/meeting');
 
 var app = express();
 var compiler = webpack(webpackConfig);
@@ -42,6 +43,8 @@ app.use(require('webpack-hot-middleware')(compiler));
 
 app.use('/', index);
 app.use('/users', users);
+
+app.post('/new', meeting.new);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
