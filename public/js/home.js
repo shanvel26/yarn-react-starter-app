@@ -14,8 +14,10 @@ export default class Home extends Component {
 					details: [
 						{
 							_id: '_id1',
-							from: '2017-06-04 10:00:00',
-							to: '2017-06-04 11:00:00',
+							fromDate: '2017-06-04',
+							toDate: '2017-06-04',
+							fromTime: '10:00 AM',
+							toTime: '11:00 AM',
 							floor: 'F2',
 							purpose: 'Interview with external candidate',
 							invitees: ['shanvel26@gmail.com', 'devakarthik@gmail.com'],
@@ -25,8 +27,10 @@ export default class Home extends Component {
 						},
 						{
 							_id: '_id3',
-							from: '2017-06-04 12:00:00',
-							to: '2017-06-04 12:20:00',
+							fromDate: '2017-06-04',
+							toDate: '2017-06-04',
+							fromTime: '12:00 PM',
+							toTime: '12:20 PM',
 							floor: 'F2',
 							purpose: 'HR round',
 							invitees: ['shanvel26@gmail.com', 'devakarthik@gmail.com'],
@@ -41,8 +45,10 @@ export default class Home extends Component {
 					details: [
 						{
 							_id: '_id4',
-							from: '2017-06-04 09:00:00',
-							to: '2017-06-04 10:00:00',
+							fromDate: '2017-06-04',
+							toDate: '2017-06-04',
+							fromTime: '09:00 AM',
+							toTime: '10:00 AM',
 							floor: 'F1',
 							purpose: 'General discussion',
 							invitees: ['shanvel26@gmail.com', 'ritesh@xyz.com'],
@@ -61,7 +67,11 @@ export default class Home extends Component {
 			.modal('hide')
 		;
 
-		$('#example2').calendar({
+		$('#start_date').calendar({
+			type: 'date'
+		});
+
+		$('#end_date').calendar({
 			type: 'date'
 		});
 
@@ -81,6 +91,10 @@ export default class Home extends Component {
 	createNew() {
 		$('.ui.modal')
 			.modal('show')
+			.modal({
+				autofocus: false,
+				closable: true
+			});
 		;
 	}
 
@@ -90,13 +104,15 @@ export default class Home extends Component {
 	}
 
 	submit() {
+
+		let $form = $('#myForm');
+		let allValues = $form.form('get values');
+		console.log(allValues);
+
 		axios({
 			method: 'post',
 			url: '/new',
-			data: {
-				firstName: 'Fred',
-				lastName: 'Flintstone'
-			}
+			data: allValues
 		})
 		.then((resp) => {
 			console.log(resp.data);
@@ -110,9 +126,9 @@ export default class Home extends Component {
 			let details = data['details'];
 
 			let rooms = details.map((d, index) => {
-				let from = d['from'];
-				let to = d['to'];
-
+				let { fromDate, fromTime, toDate, toTime } = d;
+				let from = new Date(`${fromDate} ${fromTime}`);
+				let to = new Date(`${toDate} ${toTime}`);
 
 				let from_moment = moment(from);
 				let to_moment = moment(to)
@@ -123,8 +139,8 @@ export default class Home extends Component {
 				dt = dt.setHours(9, 0, 0, 0);
 				let first_moment = moment(dt);
 
-				console.log('from_moment', from_moment)
-				console.log('first_moment', first_moment)
+				console.log('from_moment', from_moment);
+				console.log('first_moment', first_moment);
 
 				let swiftLeft = from_moment.diff(first_moment, 'minutes');
 				console.log('SWIFTLEFT', swiftLeft);
@@ -135,7 +151,7 @@ export default class Home extends Component {
 			})
 
 			return (
-				<div>
+				<div style={{padding: '10px 0'}}>
 					<span>{data.room}</span>
 					{ rooms }
 				</div>
@@ -171,15 +187,15 @@ export default class Home extends Component {
 							New Meeting
 						</div>
 						<div className="content">
-							<form className="ui large form">
+							<form id="myForm" className="ui large form">
 								<div className="field">
-									<label>Date</label>
-									<div className="three fields">
+									<label>Start Date</label>
+									<div className="two fields">
 										<div className="field">
-											<div className="ui calendar" id="example2">
+											<div className="ui calendar" id="start_date">
 												<div className="ui input left icon">
 													<i className="calendar icon"></i>
-													<input type="text" placeholder="Date" style={{width: 'auto'}} />
+													<input type="text" name="fromDate" placeholder="Date" style={{width: 'auto'}} />
 												</div>
 											</div>
 										</div>
@@ -187,7 +203,20 @@ export default class Home extends Component {
 											<div className="ui calendar" id="start_time">
 												<div className="ui input left icon">
 													<i className="time icon"></i>
-													<input type="text" placeholder="Starts at..." style={{width: 'auto'}} />
+													<input type="text" name="fromTime" placeholder="Starts at..." style={{width: 'auto'}} />
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div className="field">
+									<label>End Date</label>
+									<div className="two fields">
+										<div className="field">
+											<div className="ui calendar" id="end_date">
+												<div className="ui input left icon">
+													<i className="calendar icon"></i>
+													<input type="text" name="toDate" placeholder="Date" style={{width: 'auto'}} />
 												</div>
 											</div>
 										</div>
@@ -195,7 +224,7 @@ export default class Home extends Component {
 											<div className="ui calendar" id="end_time">
 												<div className="ui input left icon">
 													<i className="time icon"></i>
-													<input type="text" placeholder="Ends at..." style={{width: 'auto'}}/>
+													<input type="text" name="toTime" placeholder="Ends at..." style={{width: 'auto'}}/>
 												</div>
 											</div>
 										</div>
@@ -203,43 +232,43 @@ export default class Home extends Component {
 								</div>
 
 								<div className="field">
-									<label>Place</label>
+									<label>Location</label>
 									<div className="three fields">
 										<div className="field">
-											<select className="ui dropdown">
+											<select className="ui dropdown" name="floor">
 												<option value="">Floor</option>
 												<option value="1">F1</option>
 												<option value="2">F2</option>
 											</select>
 										</div>
 										<div className="field">
-											<select className="ui dropdown">
+											<select className="ui dropdown" name="room">
 												<option value="">Room</option>
 												<option value="1">CABIN-1</option>
 												<option value="2">CABIN-2</option>
 											</select>
 										</div>
 										<div className="field">
-											<input type="text" placeholder="Capacity in seats" />
+											<input type="text" name="capacity" placeholder="Capacity in seats" />
 										</div>
 									</div>
 								</div>
 
 								<div className='field'>
 									<label>Purpose</label>
-									<textarea rows="2" placeholder="Agenda/Purpose of the meeting ..."></textarea>
+									<textarea rows="2" name="purpose" placeholder="Agenda/Purpose of the meeting ..."></textarea>
 								</div>
 								
 								<div className='field'>
 									<label>Invitees</label>
-									<textarea rows="2" placeholder="Email id's of the invitees (seperate emails by comma)"></textarea>
+									<textarea rows="2" name="invitees" placeholder="Email id's of the invitees (seperate emails by comma)"></textarea>
 								</div>
 
 								<div className='ui column two grid'>
 									<div className='column'>
 										<div className='field'>
 											<label>Chairperson</label>
-											<input type="text" placeholder="Email/name of the chairperson" />
+											<input type="text" name="chairperson" placeholder="Email/name of the chairperson" />
 										</div>
 									</div>
 								</div>

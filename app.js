@@ -8,6 +8,10 @@ var webpackDevMiddleware = require("webpack-dev-middleware");
 var webpack = require("webpack");
 var webpackConfig = require("./webpack.config");
 var hbs = require('hbs');
+var MongoClient     = require('mongodb').MongoClient
+const session       = require('express-session')
+const MongoStore    = require('connect-mongo')(session)
+
 
 var index = require('./routes/index');
 var users = require('./routes/users');
@@ -15,6 +19,17 @@ var meeting = require('./routes/meeting');
 
 var app = express();
 var compiler = webpack(webpackConfig);
+
+var db
+var url = 'mongodb://127.0.0.1:27017/mymeeting';
+MongoClient.connect(url, function(err, db) {
+    if (err)
+        console.log(err)
+    else
+        console.log("Client MongoDB connected...")
+    global.db = db
+});
+
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -31,6 +46,17 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+
+app.use(session({
+  secret: 'mysecretkey',
+  saveUninitialized: false,
+  resave: true,
+  store: new MongoStore({
+    url: 'mongodb://127.0.0.1:27017/mymeeting'
+  })
+}))
+
 
 app.use(webpackDevMiddleware(compiler, {
   // publicPath: "/", // Same as `output.publicPath` in most cases.
