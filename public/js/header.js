@@ -3,13 +3,16 @@ import React, { Component } from 'react';
 export default class Header extends Component {
   render() {
     return (
-      <header className="navbar navbar-inverse bg-primary" style={{ "marginBottom": 50 }}>
-        <nav className="container">
-          <a className="navbar-brand" href="/">
-            myMeeting
-          </a>
-        </nav>
-      </header>
+        <div className="ui top fixed indigo inverted segment menu">
+          <div className="item" style={{padding: 0}}>
+            <img src="/images/logo.png" style={{width: 120}}/>
+          </div>
+          <div className="right menu">
+            <a className="ui item">
+              Logout
+            </a>
+          </div>
+        </div>
     )
   }
 }

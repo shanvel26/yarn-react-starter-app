@@ -14,7 +14,7 @@ export default class Progress extends Component {
     let swiftLeft = this.props.swiftLeft;
     let diff = this.props.diff;
     return (
-      <span className='timeline' onClick={this.showDetails.bind(this)} style={{background: '#0275D8', width: diff, position: 'absolute', left: swiftLeft}}></span>
+      <span className='timeline' onClick={this.showDetails.bind(this)} style={{background: '#3F51B5', width: diff, position: 'absolute', left: swiftLeft}}></span>
     );
   }
 }

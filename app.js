@@ -12,7 +12,6 @@ var MongoClient     = require('mongodb').MongoClient
 const session       = require('express-session')
 const MongoStore    = require('connect-mongo')(session)
 
-
 var index = require('./routes/index');
 var users = require('./routes/users');
 var meeting = require('./routes/meeting');
@@ -71,6 +70,7 @@ app.use('/', index);
 app.use('/users', users);
 
 app.post('/new', meeting.new);
+app.get('/find', meeting.find);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
