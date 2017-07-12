@@ -13,26 +13,15 @@ export default class Home extends Component {
 		}
 	}
 
-	componentDidMount() {
+	instantiateCalendar() {
 		let self = this;
-		$('.ui.modal')
-			.modal('hide')
-		;
-
+		
 		$('#start_date').calendar({
 			type: 'date'
 		});
-
+		
 		$('#end_date').calendar({
 			type: 'date'
-		});
-
-		$('#scheduledDate').calendar({
-			type: 'date',
-			onChange: function (date, text, mode) {
-				self.loadSchedule(text);
-				console.log("date changed.....", date, text, mode)
-			},
 		});
 
 		$('#start_time').calendar({
@@ -43,8 +32,19 @@ export default class Home extends Component {
 			type: 'time'
 		});
 
-		$('.ui.dropdown').dropdown();
-		// this.loadSchedule();
+		$('#scheduledDate').calendar({
+			type: 'date',
+			onChange: function (date, text, mode) {
+				self.loadSchedule(text);
+				console.log("date changed.....", date, text, mode)
+			},
+		});
+	}
+
+	componentDidMount() {
+		let self = this;
+		$('.ui.modal').modal('hide');
+		this.instantiateCalendar();
 	}
 
 	loadSchedule(date) {
@@ -59,14 +59,12 @@ export default class Home extends Component {
 		.then((resp) => {
 			console.log("GOT THE DAT", resp.data);
 			let meeting = resp.data;
-			console.log("meeting &&&&&&&&&&&&&", meeting)
+			console.log("meeting &&&&&&&&&&&&&", meeting);
 			self.setState({
 				meeting: meeting
 			})
 		});
 	}
-
-	
 
 	showDetails(e) {
 		let value = e.target.dataset.value;
@@ -115,7 +113,6 @@ export default class Home extends Component {
 		return (
 			<div className="ui grid container" style={{marginTop: 80}}>
 				<NewMeeting />
-				
 				<div className="timeline sixteen wide column" id="timeline">
 					<div className="ui large form" style={{marginBottom: '20px'}}>
 							<div className="ui calendar" id="scheduledDate">
@@ -143,8 +140,6 @@ export default class Home extends Component {
 					<span>9 pm</span>
 					<span>10 pm</span>
 					{ all_meeting.length > 0 ? all_meeting : <div>No meetings scheduled</div> }
-
-					
 				</div>
 			</div>
 		)

@@ -118,3 +118,31 @@ exports.find = (req, res, next) => {
     }
   });
 }
+
+exports.getNewMeetingConfig = (req, res, next) => {
+  let newMeetingConfig = db.collection('new_meeting_config');
+  newMeetingConfig.aggregate([
+    {
+      $group: { 
+        _id: '$floor',
+        rooms: {
+          $addToSet: {
+            room: '$room'
+          }
+        }
+      }
+    },
+    {
+      $project: {
+        floor: '$_id',
+        rooms: '$rooms'
+      }
+    }
+  ], (err, docs) => {
+    if (err) {
+      console.log(err.errmsg);
+      return res.json(err);
+    }
+    return res.json(docs);
+  });
+}

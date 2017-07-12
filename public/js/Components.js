@@ -13,10 +13,10 @@ export const StartDate = () => {
 
 export const StartTime = () => {
   return (
-    <div className="ui calendar" id="start_time6">
+    <div className="ui calendar" id="start_time">
       <div className="ui input left icon">
         <i className="time icon"></i>
-        <input type="text" name="fromTime6" placeholder="From Time" style={{width: 'auto'}} />
+        <input type="text" name="fromTime" placeholder="From Time" style={{width: 'auto'}} />
       </div>
     </div>
   );
@@ -44,26 +44,32 @@ export const EndTime = () => {
   )
 }
 
-export const Floor = () => {
+export const Floor = ({floors, callback}) => {
+
+  let onChangeFloor = (e) => {
+    let value = e.target.value;
+    callback(value);
+  }
+
+  let myfloors = floors.map(f => {
+    return (
+      <option value={f}>{f}</option>
+    )
+  })
   return (
-    <div className="field">
-      <select className="ui dropdown" name="floor">
-        <option value="">Floor</option>
-        <option value="1">F1</option>
-        <option value="2">F2</option>
-      </select>
-    </div>
+    <select id="floor" onChange={onChangeFloor} className="ui dropdown" name="floor" placeholder="Select floor">
+      <option value="">Floor</option>
+      { myfloors }
+    </select>
   );
 }
 
 export const Room = () => {
   return (
-    <div className="field">
-      <select className="ui dropdown" name="room">
-        <option value="">Room</option>
-        <option value="1">CABIN-1</option>
-        <option value="2">CABIN-2</option>
-      </select>
-    </div>
+    <select className="ui dropdown" name="room">
+      <option value="">Room</option>
+      <option value="1">CABIN-1</option>
+      <option value="2">CABIN-2</option>
+    </select>
   );
 }

@@ -32,7 +32,17 @@ var config = {
       test: /\.css$/,
       include: path.join(__dirname, 'public/css'),
       loader: 'style-loader!css-loader'
-    }
+    },
+    {
+      test: /\.css$/,
+      include: path.join(__dirname, 'public/dist'),
+      loader: 'style-loader!css-loader'
+    },
+    {
+      test: /\.(ttf|eot|woff|woff2|svg|png)$/,
+      loader: 'file-loader',
+      include: path.join(__dirname, 'public/dist')
+    },
     ]
   }
 };

@@ -8,9 +8,9 @@ var webpackDevMiddleware = require("webpack-dev-middleware");
 var webpack = require("webpack");
 var webpackConfig = require("./webpack.config");
 var hbs = require('hbs');
-var MongoClient     = require('mongodb').MongoClient
-const session       = require('express-session')
-const MongoStore    = require('connect-mongo')(session)
+var MongoClient = require('mongodb').MongoClient;
+const session = require('express-session');
+const MongoStore = require('connect-mongo')(session);
 
 var index = require('./routes/index');
 var users = require('./routes/users');
@@ -71,6 +71,7 @@ app.use('/users', users);
 
 app.post('/new', meeting.new);
 app.get('/find', meeting.find);
+app.get('/getNewMeetingConfig', meeting.getNewMeetingConfig);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

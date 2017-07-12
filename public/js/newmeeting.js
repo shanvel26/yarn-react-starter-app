@@ -1,10 +1,56 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import _ from 'underscore';
+import { 
+  StartDate, 
+  StartTime, 
+  EndDate, 
+  EndTime,
+  Floor,
+  Room,
+} from './Components';
+
+import '../dist/semantic.css';
+// import '../dist/semantic.min.js';
 
 export default class NewMeeting extends Component {
 
-  submit() {
+  constructor(props) {
+		super(props);
+    this.state = {
+      floor: [],
+      room: []
+    }
+  }
 
+  componentDidMount() {
+    $('.ui.dropdown').dropdown();
+
+    axios({
+      method: 'get',
+      url: '/getNewMeetingConfig',
+    })
+    .then((resp) => {
+      console.log(resp);
+      let data = resp.data;
+      let floor = _.pluck(data, 'floor');
+      console.log(floor)
+      this.setState({
+        floor
+      })
+    });
+  }
+
+  onChangeFloor(value) {
+    console.log("ON Change floor....", value);
+    let floor = this.state.floor;
+    console.log('floor', floor)
+    // _.find(floor, (f) => {
+    //   console.log(f);
+    // })
+  }
+
+  submit() {
 		let $form = $('#myForm');
 		let allValues = $form.form('get values');
 		console.log(allValues);
@@ -20,11 +66,8 @@ export default class NewMeeting extends Component {
 	}
 
   createNew() {
-		$('.ui.modal')
-			.modal('show')
-		;
+		$('.ui.modal').modal('show');
 	}
-
 
   render() {
     return (
@@ -42,23 +85,13 @@ export default class NewMeeting extends Component {
           <div className="content">
             <form id="myForm" className="ui form">
               <div className="field">
-                <label>Start Date</label>	
+                <label>Start Date</label>
                 <div className="two fields">
                   <div className="field">
-                    <div className="ui calendar" id="start_date">
-                      <div className="ui input left icon">
-                        <i className="calendar icon"></i>
-                        <input type="text" name="fromDate" placeholder="Date" style={{width: 'auto'}} />
-                      </div>
-                    </div>
+                    <StartDate />
                   </div>
                   <div className="field">
-                    <div className="ui calendar" id="start_time">
-                      <div className="ui input left icon">
-                        <i className="time icon"></i>
-                        <input type="text" name="fromTime" placeholder="Starts at..." style={{width: 'auto'}} />
-                      </div>
-                    </div>
+                    <StartTime />
                   </div>
                 </div>
               </div>
@@ -66,20 +99,10 @@ export default class NewMeeting extends Component {
                 <label>End Date</label>
                 <div className="two fields">
                   <div className="field">
-                    <div className="ui calendar" id="end_date">
-                      <div className="ui input left icon">
-                        <i className="calendar icon"></i>
-                        <input type="text" name="toDate" placeholder="Date" style={{width: 'auto'}} />
-                      </div>
-                    </div>
+                    <EndDate />
                   </div>
                   <div className="field">
-                    <div className="ui calendar" id="end_time">
-                      <div className="ui input left icon">
-                        <i className="time icon"></i>
-                        <input type="text" name="toTime" placeholder="Ends at..." style={{width: 'auto'}}/>
-                      </div>
-                    </div>
+                    <EndTime />
                   </div>
                 </div>
               </div>
@@ -88,18 +111,10 @@ export default class NewMeeting extends Component {
                 <label>Location</label>
                 <div className="three fields">
                   <div className="field">
-                    <select className="ui dropdown" name="floor">
-                      <option value="">Floor</option>
-                      <option value="1">F1</option>
-                      <option value="2">F2</option>
-                    </select>
+                    <Floor floors={this.state.floor} callback={this.onChangeFloor.bind(this)} />
                   </div>
                   <div className="field">
-                    <select className="ui dropdown" name="room">
-                      <option value="">Room</option>
-                      <option value="1">CABIN-1</option>
-                      <option value="2">CABIN-2</option>
-                    </select>
+                    <Room />
                   </div>
                   <div className="field">
                     <input type="text" name="capacity" placeholder="Capacity in seats" />
