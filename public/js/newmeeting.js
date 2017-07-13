@@ -19,7 +19,8 @@ export default class NewMeeting extends Component {
 		super(props);
     this.state = {
       floor: [],
-      room: []
+      room: [],
+      boardInfo: []
     }
   }
 
@@ -36,18 +37,30 @@ export default class NewMeeting extends Component {
       let floor = _.pluck(data, 'floor');
       console.log(floor)
       this.setState({
-        floor
+        floor,
+        boardInfo: data
       })
     });
   }
 
   onChangeFloor(value) {
     console.log("ON Change floor....", value);
-    let floor = this.state.floor;
-    console.log('floor', floor)
-    // _.find(floor, (f) => {
-    //   console.log(f);
-    // })
+
+    let self = this;
+    let selectedFloor = value;
+    let floors = this.state.floor;
+    let boardInfo = this.state.boardInfo;
+    console.log('floors', floors);
+    console.log('board info', this.state.boardInfo);
+    _.find(boardInfo, board => {
+      if (board.floor === selectedFloor) {
+        console.log('rooms---', board.rooms);
+        self.setState({
+          rooms: board.rooms
+        });
+        return board.rooms;
+      }
+    });
   }
 
   submit() {
@@ -114,7 +127,7 @@ export default class NewMeeting extends Component {
                     <Floor floors={this.state.floor} callback={this.onChangeFloor.bind(this)} />
                   </div>
                   <div className="field">
-                    <Room />
+                    <Room rooms={this.state.rooms} />
                   </div>
                   <div className="field">
                     <input type="text" name="capacity" placeholder="Capacity in seats" />

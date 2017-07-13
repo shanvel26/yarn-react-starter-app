@@ -13,17 +13,17 @@ var parseDate = (fromDate, fromTime, toDate, toTime) => {
 }
 
 exports.new = (req, res, next) => {
-  let { 
-    fromDate, 
-    toDate, 
-    fromTime, 
-    toTime, 
-    floor, 
-    room, 
-    capacity, 
-    purpose, 
-    invitees, 
-    chairperson, 
+  let {
+    fromDate,
+    toDate,
+    fromTime,
+    toTime,
+    floor,
+    room,
+    capacity,
+    purpose,
+    invitees,
+    chairperson,
   } = req.body;
 
   fromDate = moment(fromDate, 'MMM DD, YYYY');
@@ -35,9 +35,9 @@ exports.new = (req, res, next) => {
     fromDate,
     toDate,
     fromTime,
-    toTime, 
-    floor, 
-    room, 
+    toTime,
+    floor,
+    room,
     capacity,
     purpose,
     invitees,
@@ -47,7 +47,7 @@ exports.new = (req, res, next) => {
   query.status = 'scheduled';
 
   db.collection('scheduled').insertOne(
-    query, 
+    query,
     (err, result) => {
       // console.log(result);
       return res.json(result);
@@ -123,12 +123,10 @@ exports.getNewMeetingConfig = (req, res, next) => {
   let newMeetingConfig = db.collection('new_meeting_config');
   newMeetingConfig.aggregate([
     {
-      $group: { 
+      $group: {
         _id: '$floor',
         rooms: {
-          $addToSet: {
-            room: '$room'
-          }
+          $addToSet: '$room'
         }
       }
     },
@@ -136,6 +134,11 @@ exports.getNewMeetingConfig = (req, res, next) => {
       $project: {
         floor: '$_id',
         rooms: '$rooms'
+      }
+    },
+    {
+      $sort: {
+        floor: 1
       }
     }
   ], (err, docs) => {

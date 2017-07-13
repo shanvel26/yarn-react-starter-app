@@ -45,7 +45,6 @@ export const EndTime = () => {
 }
 
 export const Floor = ({floors, callback}) => {
-
   let onChangeFloor = (e) => {
     let value = e.target.value;
     callback(value);
@@ -55,7 +54,8 @@ export const Floor = ({floors, callback}) => {
     return (
       <option value={f}>{f}</option>
     )
-  })
+  });
+
   return (
     <select id="floor" onChange={onChangeFloor} className="ui dropdown" name="floor" placeholder="Select floor">
       <option value="">Floor</option>
@@ -64,12 +64,19 @@ export const Floor = ({floors, callback}) => {
   );
 }
 
-export const Room = () => {
+export const Room = ({rooms}) => {
+  $('#room').dropdown('clear');
+  rooms = rooms ? rooms : [];
+  let myrooms = rooms.map(room => {
+    return (
+      <option value={room}>{room}</option>
+    )
+  });
+
   return (
-    <select className="ui dropdown" name="room">
+    <select className="ui dropdown" id="room" name="room">
       <option value="">Room</option>
-      <option value="1">CABIN-1</option>
-      <option value="2">CABIN-2</option>
+      { myrooms }
     </select>
   );
 }
