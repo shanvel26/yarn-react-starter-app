@@ -10,7 +10,7 @@ export default class Progress extends Component {
   showDetails(e) {
     e.stopPropagation();
     console.log('props...', this.props.data);
-    $('#details').modal('toggle');
+    $('#details').modal('show');
   }
 
   render() {
@@ -23,22 +23,49 @@ export default class Progress extends Component {
         </span>
         <div id="details" className="ui modal">
           <i className="close icon"></i>
-          <div className="header">
-            {moment(data.fromDate).format('MMM DD, YYYY')}
+            <div className="header">
+              <i className="calendar outline icon"></i>
+              { moment(data.fromDate).format('dddd, MMM DD, YYYY') }
+              <div style={{fontWeight: 'normal', fontSize: '0.8em', marginTop: 10, marginLeft: 30}}>
+                { data.fromTime } to { data.toTime }
+              </div>
+
+              <div style={{marginTop: '10px'}}>
+                <i className="marker icon"></i>
+                <span style={{fontSize: '0.75em'}}>{ data.room }</span>
+              </div>
+            </div>
+          
+            
+            {/*{moment(data.fromDate).format('MMM DD, YYYY')}
             {
               (() => {
                 if (moment(data.fromDate).isBefore(data.toDate)) {
                   return ` - ${data.toDate}`;
                 }
               })()
-            }
-          </div>
-          <div className="image content">
-            <div className="image">
-              An image can appear on left or an icon
-            </div>
-            <div className="description">
-              A description can appear on the right
+            }*/}
+          
+          <div className="content">
+            <div className="ui grid form">
+              <div className="four wide column">
+                <label>Purpose</label>
+              </div>
+              <div className="twelve wide column">
+                <div>{ data.purpose }</div>
+              </div>
+              <div className="four wide column">
+                <label>Invitees</label>
+              </div>
+              <div className="twelve wide column">
+                <div>{ data.invitees }</div>
+              </div>
+              <div className="four wide column">
+                <label>Chairperson</label>
+              </div>
+              <div className="twelve wide column">
+                <div>{ data.chairperson }</div>
+              </div>
             </div>
           </div>
           <div className="actions">

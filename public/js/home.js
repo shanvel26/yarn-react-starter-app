@@ -9,7 +9,8 @@ export default class Home extends Component {
 		super(props);
 
 		this.state = {
-			meeting: []
+			meeting: [],
+			currentDate: ''
 		}
 	}
 
@@ -41,12 +42,30 @@ export default class Home extends Component {
 		});
 	}
 
+	getCurrentDate() {
+		let self = this;
+		axios({
+			method: 'get',
+			url: '/getCurrentDate',
+		})
+		.then(resp => {
+			console.log(resp.data);
+			let currentDate = resp.data;
+			this.loadSchedule(currentDate)
+			self.setState({
+				currentDate
+			})
+		});
+	}
+
 	componentDidMount() {
 		let self = this;
 		$('.ui.modal').modal('hide');
 		this.instantiateCalendar();
+		this.getCurrentDate();
 	}
 
+	
 	loadSchedule(date) {
 		var self = this;
 		axios({
@@ -56,12 +75,13 @@ export default class Home extends Component {
 				date: date
 			}
 		})
-		.then((resp) => {
+		.then(resp => {
 			console.log("GOT THE DAT", resp.data);
 			let meeting = resp.data;
 			console.log("meeting &&&&&&&&&&&&&", meeting);
 			self.setState({
-				meeting: meeting
+				meeting: meeting,
+				currentDate: date
 			})
 		});
 	}
@@ -73,7 +93,7 @@ export default class Home extends Component {
 
 	render() {
 		let meeting = this.state.meeting;
-		let all_meeting = meeting.map((data) => {
+		let all_meeting = meeting.map((data, index) => {
 			console.log(data);
 			let details = data['details'];
 
@@ -83,9 +103,18 @@ export default class Home extends Component {
 				let to = new Date(`${toDate} ${toTime}`);
 
 				let from_moment = moment(from);
-				let to_moment = moment(to)
-				let diff = to_moment.diff(from_moment, 'minutes');
-				console.log(diff)
+				let to_moment = moment(to);
+
+				let from_minutes = from_moment.format('H') * 60;
+				from_minutes = Number(from_moment.format('m')) + from_minutes;
+
+				let to_minutes = to_moment.format('H') * 60;
+				to_minutes = Number(to_moment.format('m')) + to_minutes;
+
+				console.log('from_minutes', from_minutes);
+				console.log('to_minutes', to_minutes);
+
+				let minutes = to_minutes - from_minutes;
 
 				let dt = new Date(from);
 				dt = dt.setHours(9, 0, 0, 0);
@@ -98,12 +127,12 @@ export default class Home extends Component {
 				console.log('SWIFTLEFT', swiftLeft);
 
 				return (
-					<Progress data={d} diff={diff} swiftLeft={swiftLeft+200} />
+					<Progress key={index} data={d} diff={minutes} swiftLeft={swiftLeft+200} />
 				);
 			})
 
 			return (
-				<div style={{padding: '10px 0'}}>
+				<div key={index} style={{padding: '10px 0'}}>
 					<span>{data.room}</span>
 					{ rooms }
 				</div>
@@ -119,7 +148,7 @@ export default class Home extends Component {
 								<label>Select a date: </label>
 								<div className="ui input left icon">
 									<i className="time icon"></i>
-									<input type="text" id="scheduledDate1" name="scheduledDate" style={{width: 'auto'}} />
+									<input type="text" id="scheduledDate1" name="scheduledDate" style={{width: 'auto'}} value={this.state.currentDate}/>
 								</div>
 							</div>
 					</div>

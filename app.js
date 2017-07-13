@@ -15,6 +15,7 @@ const MongoStore = require('connect-mongo')(session);
 var index = require('./routes/index');
 var users = require('./routes/users');
 var meeting = require('./routes/meeting');
+var helper = require('./routes/helper');
 
 var app = express();
 var compiler = webpack(webpackConfig);
@@ -72,6 +73,7 @@ app.use('/users', users);
 app.post('/new', meeting.new);
 app.get('/find', meeting.find);
 app.get('/getNewMeetingConfig', meeting.getNewMeetingConfig);
+app.get('/getCurrentDate', helper.getCurrentDate);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

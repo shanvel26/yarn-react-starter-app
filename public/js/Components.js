@@ -50,9 +50,9 @@ export const Floor = ({floors, callback}) => {
     callback(value);
   }
 
-  let myfloors = floors.map(f => {
+  let myfloors = floors.map((f, index) => {
     return (
-      <option value={f}>{f}</option>
+      <option key={index} value={f}>{f}</option>
     )
   });
 

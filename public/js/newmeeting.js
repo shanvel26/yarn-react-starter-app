@@ -78,8 +78,9 @@ export default class NewMeeting extends Component {
 		});
 	}
 
-  createNew() {
-		$('.ui.modal').modal('show');
+  createNew(e) {
+    e.stopPropagation();
+		$('#new_modal').modal('show');
 	}
 
   render() {
@@ -90,7 +91,7 @@ export default class NewMeeting extends Component {
             Schedule a Meeting
           </button>
         </div>
-        <div className="ui modal">
+        <div className="ui modal" id="new_modal">
           <i className="close icon"></i>
           <div className="header">
             New Meeting
