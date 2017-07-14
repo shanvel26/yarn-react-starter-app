@@ -58,13 +58,13 @@ exports.find = (req, res, next) => {
   let date = req.query.date;
   console.log(date);
 
-  let today = moment(new Date(date)).format('YYYY-MM-DD');
-  console.log(today);
+  date = moment(new Date(date)).format('YYYY-MM-DD');
+  console.log(date);
 
   let scheduled = db.collection('scheduled');
   scheduled.aggregate([
     {
-      $match: { fromDate: today },
+      $match: { fromDate: { $lte: date }, toDate: { $gte: date } },
     },
     {
       $project: {

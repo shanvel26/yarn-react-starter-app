@@ -9,8 +9,9 @@ export default class Progress extends Component {
 
   showDetails(e) {
     e.stopPropagation();
-    console.log('props...', this.props.data);
-    $('#details').modal('show');
+    console.log('props...', this.props.data._id);
+    let id = this.props.data._id;
+    $(`#${id}`).modal('show');
   }
 
   render() {
@@ -21,7 +22,7 @@ export default class Progress extends Component {
       <div style={{display: 'inline'}}>
         <span className='timeline' onClick={this.showDetails.bind(this)} style={{background: '#3F51B5', width: diff, position: 'absolute', left: swiftLeft}}>
         </span>
-        <div id="details" className="ui modal">
+        <div id={data._id} className="ui modal">
           <i className="close icon"></i>
             <div className="header">
               <i className="calendar outline icon"></i>
@@ -48,32 +49,39 @@ export default class Progress extends Component {
           
           <div className="content">
             <div className="ui grid form">
-              <div className="four wide column">
-                <label>Purpose</label>
-              </div>
-              <div className="twelve wide column">
-                <div>{ data.purpose }</div>
-              </div>
-              <div className="four wide column">
-                <label>Invitees</label>
-              </div>
-              <div className="twelve wide column">
-                <div>{ data.invitees }</div>
-              </div>
-              <div className="four wide column">
-                <label>Chairperson</label>
-              </div>
-              <div className="twelve wide column">
-                <div>{ data.chairperson }</div>
+              <div className="sixteen wide column">
+                <div style={styles.row}>
+                  <label style={styles.label}>Purpose</label>
+                  <span>{ data.purpose }</span>
+                </div>
+                <div style={styles.row}>
+                  <label style={styles.label}>Invitees</label>
+                  <span>{ data.invitees }</span>
+                </div>
+                <div style={styles.row}>
+                  <label style={styles.label}>Chairperson</label>
+                  <span>{ data.chairperson }</span>
+                </div>
               </div>
             </div>
           </div>
           <div className="actions">
-            <div className="ui button">Cancel</div>
-            <div className="ui button">OK</div>
+            <div className="ui cancel button">Okay</div>
           </div>
         </div>
       </div>
     );
+  }
+}
+
+var styles = {
+  row: {
+    margin: 10
+  },
+  label: {
+    marginRight: 20,
+    fontWeight: 'bold',
+    minWidth: 100,
+    display: 'inline-block'
   }
 }
