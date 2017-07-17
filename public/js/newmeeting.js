@@ -41,6 +41,20 @@ export default class NewMeeting extends Component {
         boardInfo: data
       })
     });
+
+
+    $('.ui.form')
+  .form({
+    inline: true,
+    on: 'blur',
+    fields: {
+      fromDate : 'empty',
+      fromTime: 'empty',
+      toDate: 'empty',
+      toTime: 'empty',
+      floor: 'empty',
+    }
+  });
   }
 
   onChangeFloor(value) {
@@ -63,10 +77,20 @@ export default class NewMeeting extends Component {
     });
   }
 
-  submit() {
+  submit(e) {
+    e.preventDefault();
 		let $form = $('#myForm');
 		let allValues = $form.form('get values');
 		console.log(allValues);
+
+    // $('.ui.form').form('error', 'i am a error...');
+
+    $('.ui.form').form('add errors', {invitees: "im a error"});
+
+    // $('.ui.form').form('add prompt', 'invitees', 'Invitees required...');
+
+    // $('.ui.form').form('remove prompt', 'invitees');
+
 
 		axios({
 			method: 'post',
@@ -96,8 +120,15 @@ export default class NewMeeting extends Component {
           <div className="header">
             New Meeting
           </div>
+
+
+          
+
+
+
+
           <div className="content">
-            <form id="myForm" className="ui form">
+            <form id="myForm" className="ui form segment">
               <div className="field">
                 <label>Start Date</label>
                 <div className="two fields">
@@ -154,19 +185,19 @@ export default class NewMeeting extends Component {
                   </div>
                 </div>
               </div>
+
+              <div className="actions" style={{marginTop: 20}}>
+                <div className="ui deny button">
+                  Cancel
+                </div>
+                <div className="ui primary submit indigo right labeled icon button" onClick={this.submit}>
+                  Schedule Now
+                  <i className="checkmark icon"></i>
+                </div>
+                <div className="ui error message"></div>
+              </div>
             </form>
           </div>
-
-          <div className="actions">
-            <div className="ui deny button">
-              Cancel
-            </div>
-            <div className="ui primary indigo right labeled icon button" onClick={this.submit}>
-              Schedule Now
-              <i className="checkmark icon"></i>
-            </div>
-          </div>
-
         </div>
       </div>
     )

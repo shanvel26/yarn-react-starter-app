@@ -63,6 +63,9 @@ export default class Home extends Component {
 		$('.ui.modal').modal('hide');
 		this.instantiateCalendar();
 		this.getCurrentDate();
+
+
+		
 	}
 
 	
